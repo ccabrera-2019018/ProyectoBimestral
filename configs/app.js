@@ -11,6 +11,8 @@ import { config } from "dotenv"
 import userRoutes from '../src/user/user.routes.js'
 import productRoutes from '../src/products/product.routes.js'
 import categoryRoutes from '../src/category/category.routes.js'
+import shoppingCartRoutes from '../src/shoppingCart/shoppingCart.routes.js'
+import billRoutes from '../src/bill/bill.routes.js'
 
 //Configuraciones
 config();
@@ -25,9 +27,11 @@ app.use(helmet()) //Aplica capa de seguridad basica al servidor
 app.use(morgan('dev')) //Logs de solicitudes al servidor HTTP
 
 //Declaracion 
-app.use(userRoutes)
-app.use(productRoutes)
-app.use(categoryRoutes)
+app.use('/user', userRoutes)
+app.use('/product', productRoutes)
+app.use('/category', categoryRoutes)
+app.use('/shoppingCart', shoppingCartRoutes)
+app.use('/bill', billRoutes)
 
 //Levantar el servidor
 export const initServer = () => {

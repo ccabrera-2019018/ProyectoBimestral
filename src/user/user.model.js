@@ -11,7 +11,7 @@ const userSchema = mongoose.Schema({
     },
     username: {
         type: String,
-        unique: true,
+        unique: [true, 'username already exists'],
         lowercase: true,
         required: true
     },
@@ -42,4 +42,4 @@ const userSchema = mongoose.Schema({
 
 //pre mongoose
 
-export default mongoose.model('user', userSchema)
+export default mongoose.model('User', userSchema)

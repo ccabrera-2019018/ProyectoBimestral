@@ -7,14 +7,13 @@ export const test = (req, res) => {
     console.log('Test is running')
     res.send({ message: 'test function is running' })
 }
-
-export const get = async(req, res) => {
+export const get = async (req, res) => {
     try {
-        let products = await Product.find()
-        return res.send({ products })
+        let products = await Product.find().populate('category', ['name']);
+        return res.send({ products });
     } catch (err) {
-        console.error(err)
-        return res.status(500).send({message: 'Error getting products'})
+        console.error(err);
+        return res.status(500).send({ message: `Error getting products.` });
     }
 }
 
@@ -78,7 +77,7 @@ export const search = async(req, res) => {
         //Obtener el parámetro de búsqueda
         let { search } = req.body
         //Buscar
-        let products = await Product.find({name: search}).populate('category', ['name', 'description'])
+        let products = await Product.find({name: { $regex: new RegExp(search, 'i')}}).populate('category', ['name', 'description'])
         //Validar la respuesta
         if(!products) return res.status(404).send({message: 'Product not found'})
         //Responder al usuario
@@ -89,15 +88,31 @@ export const search = async(req, res) => {
     }
 }
 
-export const showProduct = async(req, res) => {
+export const soldOut = async(req, res) => {
     try {
-        let results = await Product.find();
-        if(!results) return res.status(400).send({message:`Empty collection.`})
-        return res.send(
-        { results }
-        ).populate('Category', ['name', 'description']);
+        let product = await Product.find({ stock: 0}).populate('category')
+        return res.send({ product })
     } catch (err) {
         console.error(err)
-        return res.status(500).send({message: 'Nothing to show'})
+        return res.status(500).send({message: 'Error getting products out of stock.'})
+    }
+}
+
+// Función de busqueda de los productos mas vendidos 
+export const getMoreSold = async (req, res) => {
+    try {
+        // Obtener los productos con al menos una venta.
+        const moreSold = await Product.find({ sold: { $gt: 0 } }).sort({ sales: -1 }).limit(10)
+        
+        // Productos mas vendidos
+        const response = {
+            message: 'Here are the products that have sold the most.',
+            moreSold: moreSold
+        }
+        
+        res.send(response);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error getting the best selling products' })
     }
 }

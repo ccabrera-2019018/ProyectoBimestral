@@ -3,11 +3,12 @@ import mongoose from "mongoose";
 const categorySchema = mongoose.Schema({
     name: {
         type: String,
-        required: true
+        unique: [true, 'name already exists'],
+        required: [true, 'name is required']
     },
     description: {
         type: String,
-        required: true
+        required: false
     },
 }, {
     versionKey: false

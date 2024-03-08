@@ -35,14 +35,5 @@ export const checkUpdate = (data, userId) => {
             return true
         }
         return false
-    }else{
-        if(
-            Object.entries(data).length === 0 ||
-            data.keeper ||
-            data.keeper == ''
-        ){
-            return false
-        }
-        return true
     }
 }

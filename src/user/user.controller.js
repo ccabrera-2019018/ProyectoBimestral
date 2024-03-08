@@ -3,6 +3,8 @@
 import { encrypt, checkPassword, checkUpdate } from '../utils/validator.js'
 import User from './user.model.js'
 import { generateJwt } from '../utils/jwt.js'
+import jwt from 'jsonwebtoken'
+import Bill from '../bill/bill.model.js'
 
 export const test = (req, res) => {
     console.log('test is running')
@@ -52,9 +54,18 @@ export const register = async(req, res)=>{
 export const login = async(req, res) => {
     try {
         //Capturar los datos (body)
-        let { username, password } = req.body
+        let { username, password, email } = req.body
         //Validar que el usuario exista
-        let user = await User.findOne({username}) //buscar un solo registro. username: 'ccabrera'
+        let user = await User.findOne({
+            $or:[
+                {
+                    username
+                },
+                {
+                    email
+                }
+            ]
+        }) //buscar un solo registro.
         //Verifico que la contraseña coincida
         if(user && await checkPassword(password, user.password)){
             let loggedUser = {
@@ -142,5 +153,23 @@ export const createAdmin = async () => {
     } catch (err) {
         console.error(err);
         return err;
+    }
+}
+
+export const getPurchaseHistory = async (req, res) => {
+    try {
+        // Obtener el token
+        let secretKey = process.env.SECRET_KEY;
+        // Obteniene el token del headers
+        let { authorization } = req.headers;
+        // Verifica
+        let { uid } = jwt.verify(authorization, secretKey);
+        // Buscar todas las facturas del userId
+        const purchaseHistory = await Bill.find({ userId: uid }).populate('items.productId');
+        // Envia la factura
+        res.status(200).json({ purchaseHistory });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send({ message: 'Error getting the history' })
     }
 }
