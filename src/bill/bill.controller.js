@@ -11,7 +11,7 @@ export const getBill = async (req, res) => {
         const { billIds } = req.params;
 
         // Verificar si las facturas existen
-        const bill = await Bill.find({ _id: { $in: billIds } }).populate('items.productId').populate('userId');
+        const bill = await Bill.find({ _id: { $in: billIds } }).populate('items.productId').populate('userId')
 
         if (bill.length === 0) {
             return res.status(404).json({ message: 'No invoices found for the provided IDs.' });
@@ -24,29 +24,35 @@ export const getBill = async (req, res) => {
         bill.forEach((bill, index) => {
             // Todo el encabezado de la factura
             doc.text(`Factura #${bill._id}`);
-            doc.text(`Fecha de Creación: ${bill.createdAt}`);
+            doc.text(`Fecha de Creación: ${bill.createdAt}`)
             // Verificar si bill.userId existe 
             if (bill.userId) {
-                doc.text(`Cliente: ${bill.userId.name} ${bill.userId.surname}`);
+                doc.text(`Cliente: ${bill.userId.name} ${bill.userId.surname}`)
             } else {
-                doc.text('Cliente: Nombre del cliente no disponible');
+                doc.text('Cliente: Nombre del cliente no disponible')
             }
             doc.moveDown(); 
 
             // Detalles de los product lo metimos dentro de una tabla
             doc.moveDown();
-            doc.text('Detalles de los productos:');
+            doc.text('Detalle:')
+            doc.moveDown();
+            doc.text('-------------------------------------------------------------------------------------------------')
+            doc.text('         Name        |      Quantity     |       Unit price        |         Total           ' )
+            doc.text('-------------------------------------------------------------------------------------------------')
             doc.moveDown();
 
             // Obtiene los detalles de los productos
             bill.items.forEach((item) => {
-                doc.text(`${item.productId.name}: ${item.quantity} x Q ${item.price.toFixed(2)} = Q ${(item.quantity * item.price).toFixed(2)}`);
+                doc.text(`${item.productId.name.padEnd(24)}| ${item.quantity.toString().padEnd(20)} | Q ${item.price.toFixed(2).padEnd(20)} | Q ${item.quantity * item.price.toFixed(2)}`);
             });
 
             // Total de la factura
+            doc.moveDown();
+            doc.text('-------------------------------------------------------------------------------------------------')
             doc.text(`Total Factura: Q ${bill.amountPayable.toFixed(2)}`);
             doc.moveDown(); 
-            doc.text('Gracias por su compra. ¡Regrese pronto!', { align: 'center' });
+            doc.text('Gracias por su compra. ¡Regrese pronto!', { align: 'center' })
 
             // Agregar espacio menos la ultima 
             if (index < bill.length - 1) {
@@ -58,12 +64,12 @@ export const getBill = async (req, res) => {
         doc.end();
 
         // Aqui enviamos el archivo PDF como respuesta
-        res.setHeader('Content-Type', 'application/pdf');
-        res.setHeader('Content-Disposition', 'inline; filename=facturas_usuario.pdf');
+        res.setHeader('Content-Type', 'application/pdf')
+        res.setHeader('Content-Disposition', 'inline; filename=factura.pdf');
         doc.pipe(res);
 
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Error obtaining bil.' });
+        res.status(500).json({ message: 'Error obtaining bill.' });
     }
 };
