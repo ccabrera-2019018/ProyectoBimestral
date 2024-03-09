@@ -1,6 +1,7 @@
 'use strict'
 
 import Product from '../products/product.model.js'
+import Category from '../category/category.model.js'
 import { checkUpdate } from '../utils/validator.js'
 
 export const test = (req, res) => {
@@ -114,5 +115,28 @@ export const getMoreSold = async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Error getting the best selling products' })
+    }
+}
+
+export const getProductCategory = async(req, res)=>{
+    try {
+        //obtenemos el id de la categoria
+        let {id} = req.params;
+
+        //validamos que exista la categoria
+        let categoryFind = await Category.findOne({_id: id});
+        if(!categoryFind) return res.status(404).send({message:`Category not found`});
+
+        //buscamos los productos segun la categoria
+
+        let productsFind = await Product.find({category: categoryFind._id}).populate({
+            path: 'category',
+            select: '-_id name'
+        });
+        
+        return res.send({productsFind});
+    } catch (err) {
+        console.error(err);
+        return res.status(500).send({message:`Error getting products by category | getProductCategory.`});
     }
 }

@@ -23,7 +23,7 @@ export const getBill = async (req, res) => {
         // Aqui escribe en el pdf
         bill.forEach((bill, index) => {
             // Todo el encabezado de la factura
-            doc.text(`Factura #${bill._id}`);
+            doc.text(`Factura No. ${bill._id}`);
             doc.text(`Fecha de Creación: ${bill.createdAt}`)
             // Verificar si bill.userId existe 
             if (bill.userId) {

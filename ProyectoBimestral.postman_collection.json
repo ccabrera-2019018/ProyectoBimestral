@@ -255,13 +255,18 @@
 					"request": {
 						"method": "DELETE",
 						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
 						"url": {
-							"raw": "localhost:2656/deleteP/",
+							"raw": "localhost:2656/product/deleteP/",
 							"host": [
 								"localhost"
 							],
 							"port": "2656",
 							"path": [
+								"product",
 								"deleteP",
 								""
 							]
@@ -367,6 +372,32 @@
 							"path": [
 								"product",
 								"getMoreSold"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetProductForCategory",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2NWU4ZmE1ZjU2YzVhNWMxMWMxNDhiMzAiLCJ1c2VybmFtZSI6Impvc3VlIiwibmFtZSI6Ikpvc3VlIE5vaiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTcwOTk0MzgyNiwiZXhwIjoxNzA5OTU0NjI2fQ.-eID3EZT7S6vHAhzs4IiSK4XKJaGVXT6E9vlShP4PMg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:2656/product/byCategory/65e8fb2a69248bf9685e44c6",
+							"host": [
+								"localhost"
+							],
+							"port": "2656",
+							"path": [
+								"product",
+								"byCategory",
+								"65e8fb2a69248bf9685e44c6"
 							]
 						}
 					},
@@ -756,12 +787,12 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2NWU4ZmE1ZjU2YzVhNWMxMWMxNDhiMzAiLCJ1c2VybmFtZSI6Impvc3VlIiwibmFtZSI6Ikpvc3VlIE5vaiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTcwOTkwNDU0NywiZXhwIjoxNzA5OTE1MzQ3fQ.qt6FKmIhRE1I4gPT9hb3xbUn0BWYxX_WINYTcaa6RE4",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2NWU4ZmE1ZjU2YzVhNWMxMWMxNDhiMzAiLCJ1c2VybmFtZSI6Impvc3VlIiwibmFtZSI6Ikpvc3VlIE5vaiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTcwOTkxNjIyMCwiZXhwIjoxNzA5OTI3MDIwfQ.qlA3ztcfWtvu_P00hZIy2dsfxLkehzrts6KgahVF-vg",
 								"type": "text"
 							}
 						],
 						"url": {
-							"raw": "localhost:2656/bill/getBill/65e8fa5f56c5a5c11c148b30",
+							"raw": "localhost:2656/bill/getBill/65ea9dec90663ca0b08deba5",
 							"host": [
 								"localhost"
 							],
@@ -769,7 +800,7 @@
 							"path": [
 								"bill",
 								"getBill",
-								"65e8fa5f56c5a5c11c148b30"
+								"65ea9dec90663ca0b08deba5"
 							]
 						}
 					},
